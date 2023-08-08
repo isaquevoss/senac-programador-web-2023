@@ -1,0 +1,8 @@
+GET /clientes -> retornar uma lista de clientes
+GET /clientes/:id -> retorna um clientes especificando o seu ID
+
+POST /clientes -> cadastra um novo cliente 
+PUT /clientes/:id -> atualiza os dados do cliente conforme id
+PATCH /clientes/:id -> atualiza os dados do cliente conforme id
+DELETE /clientes/:id -> deleta o cliente conforme id
+
