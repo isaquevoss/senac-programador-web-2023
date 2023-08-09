@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="testeRequest()">delete</button>
+
+<script>
+    function testeRequest() {
+        fetch('http://localhost:3000/clientes/5',
+        {
+            method: 'DELETE'
+        }
+        ).then(resposta => {
+            console.log(resposta)
+            if(resposta.ok) {
+                console.log('Cliente removido com sucesso')
+            }
+        })
+    }
+</script>
+</body>
+
+
+</html>
