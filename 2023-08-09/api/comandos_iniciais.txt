@@ -1,0 +1,5 @@
+npm init -> enter até o fim
+npm install express
+npm install body-parser
+npm install sqlite
+npm install sqlite3
