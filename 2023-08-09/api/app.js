@@ -8,6 +8,8 @@ const sqlite = require('sqlite');
 
 var db;
 
+const clientes = [{ id: 1, nome: 'João', sobrenome: 'Silva', idade: 30 }];
+
 function criarTabelas() {
   db.exec(`CREATE TABLE IF NOT EXISTS clientes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -22,13 +24,17 @@ app.get('/clientes/:id', async (req, res) => {
     req.params.id,
   ]);
   res.json(cliente);
-
 });
 
-app.post('/clientes', async (req,res) => {      
-    const insert = await db.run('INSERT INTO clientes (nome, sobrenome, idade) VALUES (?, ?, ?)', [req.body.nome, req.body.sobrenome, req.body.idade]);
-    const cliente = await db.get('SELECT * FROM clientes WHERE id = ?', [insert.lastID]);
-    res.json(cliente);
+app.post('/clientes', async (req, res) => {
+  const insert = await db.run(
+    'INSERT INTO clientes (nome, sobrenome, idade) VALUES (?, ?, ?)',
+    [req.body.nome, req.body.sobrenome, req.body.idade]
+  );
+  const cliente = await db.get('SELECT * FROM clientes WHERE id = ?', [
+    insert.lastID,
+  ]);
+  res.json(cliente);
 });
 
 async function getClientes(req, res) {
@@ -37,7 +43,6 @@ async function getClientes(req, res) {
 }
 
 app.get('/clientes', getClientes);
-
 
 app.listen(3000, async () => {
   console.log('Server is running on port 3000');
