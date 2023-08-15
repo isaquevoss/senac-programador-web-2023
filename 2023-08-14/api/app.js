@@ -21,7 +21,7 @@ function criarTabelas() {
     'CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, email varchar(100), senha varchar(100))'
   );
 }
-//funcoes de requesicao
+//funcoes de requisição
 async function cadastrarUsuario(req, res) {
   const insert = await db.run(
     'insert into usuarios (email, senha) values (?, ?)',
