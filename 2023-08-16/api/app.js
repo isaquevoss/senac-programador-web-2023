@@ -3,6 +3,8 @@ const app = express();
 const sqlite = require('sqlite');
 const sqlite3 = require('sqlite3');
 const bodyParser = require('body-parser');
+
+//npm install jsonwebtoken
 const jsonwebtoken = require('jsonwebtoken');
 
 app.use(bodyParser.json());
