@@ -4,6 +4,9 @@ const sqlite = require('sqlite');
 const sqlite3 = require('sqlite3');
 const bodyParser = require('body-parser');
 
+const cors = require('cors');
+app.use(cors());
+
 //npm install jsonwebtoken
 const jsonwebtoken = require('jsonwebtoken');
 
@@ -23,16 +26,16 @@ app.listen(3000, async () => {
 });
 
 function criarTabelas() {
- db.run(
+  db.run(
     'CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, email varchar(100), senha varchar(100))'
-  )
-  db.run(   
+  );
+  db.run(
     `CREATE TABLE IF NOT EXISTS clientes 
     (id INTEGER PRIMARY KEY AUTOINCREMENT, 
     nome varchar(100),
     sobrenome varchar(100),
     idade INTEGER);`
-  )
+  );
 }
 //funcoes de requisição
 async function cadastrarUsuario(req, res) {
@@ -68,7 +71,7 @@ async function getClientes(req, res) {
 
 function verificarAutenticacao(req, res, next) {
   try {
-    jsonwebtoken.verify(req.headers.authorization,'senha super secreta');
+    jsonwebtoken.verify(req.headers.authorization, 'senha super secreta');
     next();
   } catch (error) {
     console.log(error.message);
@@ -84,30 +87,35 @@ app.post('/login', login);
 //MIDDLEWARE
 app.use(verificarAutenticacao);
 
-
-async function getCliente(req, res){
-  //implementação 
-  const cliente = await db.get('',[req.params.id]);
-  res.json(cliente)
-}
-
-async function createCliente(req, res){
-  const insert = await db.run ('insert into clientes () values (?,?,?)', [req.body.nome,]);
-  const cliente = await db.get('select * from clientes where id = ?',[insert.lastID]);
+async function getCliente(req, res) {
+  //implementação
+  const cliente = await db.get('select * from clientes where id = ?', [
+    req.params.id,
+  ]);
   res.json(cliente);
 }
 
-async function updateCliente(req, res){
-  await db.run('update clientes set nome = ?, sobrenome = ?, idade = ? where id = ?',[
-    req.body.nome,
-    req.body.sobrenome,
-    req.body.idade,
-    req.params.id
-  ])
-  const cliente = await db.get('select * from clientes where id ?', [req.params.id]);
+async function createCliente(req, res) {
+  const insert = await db.run(
+    'INSERT INTO clientes (nome, sobrenome, idade) VALUES (?, ?, ?)',
+    [req.body.nome, req.body.sobrenome, req.body.idade]
+  );
+  const cliente = await db.get('select * from clientes where id = ?', [
+    insert.lastID,
+  ]);
   res.json(cliente);
 }
 
+async function updateCliente(req, res) {
+  await db.run(
+    'update clientes set nome = ?, sobrenome = ?, idade = ? where id = ?',
+    [req.body.nome, req.body.sobrenome, req.body.idade, req.params.id]
+  );
+  const cliente = await db.get('select * from clientes where id = ?', [
+    req.params.id,
+  ]);
+  res.json(cliente);
+}
 
 //Registro de rotas protegitas
 app.get('/clientes', getClientes);
@@ -116,7 +124,4 @@ app.get('/clientes/:id', getCliente);
 
 app.post('/clientes', createCliente);
 
-app.put('/clientes', updateCliente);
-
-
-
+app.put('/clientes/:id', updateCliente);
