@@ -1,0 +1,5 @@
+rodar os seguintes comandos no terminal
+npm init
+npm install express body-parser cors sequelize sqlite3 jsonwebtoken
+npm install dotenv
+criar arquivo app.js
