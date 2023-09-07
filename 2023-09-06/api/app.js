@@ -9,10 +9,13 @@ const { Sequelize, DataTypes } = require('sequelize');
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
-
+//npm install pg pg-hstore
 const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: './database/database.sqlite',
+  dialect: 'postgres',
+  database: 'api',
+  host: 'localhost',
+  username: 'root', // usuario do seu banco de dados
+  password: 'admin', // senha do seu banco de dados
 });
 
 app.listen(3000, async () => {
@@ -40,7 +43,7 @@ const Cliente = sequelize.define('cliente', {
     type: DataTypes.STRING,
   },
   idade: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
   },
   email: {
     type: DataTypes.STRING,
@@ -60,22 +63,31 @@ async function cadastrarUsuario(req, res) {
 }
 
 async function login(req, res) {
-  const usuario = await Usuario.findOne({
-    where: {
-      email: req.body.email,
-    },
-  });
-
-  if (usuario.senha === req.body.senha) {
-    const token = jsonWebToken.sign(
-      {
-        usuario: usuario,
+  try {
+    const usuario = await Usuario.findOne({
+      where: {
+        email: req.body.email,
       },
-      process.env.JWT_SECRET
-    );
-    res.json({
-      token: token,
     });
+    if (!usuario) {
+      throw new Error('Usuário não encontrado');
+    }
+
+    if (usuario.senha === req.body.senha) {
+      const token = jsonWebToken.sign(
+        {
+          usuario: usuario,
+        },
+        process.env.JWT_SECRET
+      );
+      res.json({
+        token: token,
+      });
+    }
+  } catch (error) {
+    console.log('error no login');
+    console.log(error.message);
+    res.status(401).send('Usuário ou senha inválidos');
   }
 }
 
