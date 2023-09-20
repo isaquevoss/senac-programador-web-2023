@@ -9,7 +9,7 @@ function buscarClientes(req, res) {
     res.json(clientes);
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ mensagem: 'Falha ao buscar clientes' });
+    res.status(500).json({ mensagem: 'Erro ao buscar clientes' });
   }
 }
 

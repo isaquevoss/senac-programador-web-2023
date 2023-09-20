@@ -1,0 +1,7 @@
+npm init
+
+npm install express 
+npm install body-parser
+npm install sequelize
+npm install pg
+npm install pg-hstore

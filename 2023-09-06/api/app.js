@@ -53,6 +53,34 @@ const Cliente = sequelize.define('cliente', {
   },
 });
 
+const Endereco = sequelize.define('endereco', {
+  rua: {
+    type: DataTypes.STRING,
+  },
+  numero: {
+    type: DataTypes.INTEGER,
+  },
+  complemento: {
+    type: DataTypes.STRING,
+  },
+  bairro: {
+    type: DataTypes.STRING,
+  },
+  cidade: {
+    type: DataTypes.STRING,
+  },
+  clienteId: {
+    references: {
+      model: Cliente
+    }
+  }
+});
+
+Cliente.hasMany(Endereco);
+
+
+
+
 async function cadastrarUsuario(req, res) {
   const usuario = await Usuario.create({
     nome: req.body.nome,
@@ -111,8 +139,15 @@ async function cadastrarCliente(req, res) {
     nome: req.body.nome,
     sobrenome: req.body.sobrenome,
     idade: req.body.idade,
-    dataNascimento: req.body.dataNascimento,
+    dataNascimento: req.body.dataNascimento, 
+    Endereco: [
+      {
+        rua: req.body.Endereco.rua
+      }
+    ],
+
   });
+
   res.json(cliente);
 }
 
@@ -134,7 +169,9 @@ async function deletarCliente(req, res) {
 }
 
 async function buscarCliente(req, res) {
-  const cliente = await Cliente.findByPk(req.params.id);
+  const cliente = await Cliente.findByPk(req.params.id,{
+    include: Endereco
+  });
   res.json(cliente);
 }
 
