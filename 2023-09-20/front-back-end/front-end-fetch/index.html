@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="dataAtual">Data e hora Atual : <span id="data"></span></div>
+
+    <script>
+      async function getDataHora() {
+        const resposta = await fetch('http://localhost:3000/');
+        const dataHora = await resposta.json();
+        document.getElementById('data').innerHTML = new Date(
+          dataHora.dataHora
+        ).toLocaleString();
+      }
+
+      async function postExample() {
+        const resposta = await fetch('http://localhost:3000/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            nome: 'João',
+            idade: 30,
+          }),
+        });
+        const dataHora = await resposta.json();
+        console.log(dataHora);
+      }
+
+      async function getExample() {
+        const resposta = await fetch('http://localhost:3000/');
+        const dataHora = await resposta.json();
+        console.log(dataHora);
+      }
+
+      async function putExample() {
+        const resposta = await fetch('http://localhost:3000', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'PUT',
+          body: JSON.stringify({
+            nome: 'João',
+            idade: 30,
+          }),
+        });
+      }
+
+      async function cadastrarCliente(cliente) {
+        const resposta = await fetch('url', {
+          method: 'POST', //'GET', 'PUT', 'DELETE'
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'token', //token de autenticação quanto necessário
+          },
+          body: JSON.stringify(cliente),
+        });
+        const respostaJson = await resposta.json();
+      }
+
+      setInterval(getDataHora, 1000);
+    </script>
+  </body>
+</html>

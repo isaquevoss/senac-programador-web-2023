@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+
+
+    <body>
+        <div id="dataAtual">Data e hora Atual : <span id="data"></span></div>       
+
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="./clientes.js"></script>
+        <script>
+            async function getExample(){
+                const resposta = await axios.get('http://localhost:3000/')
+                document.getElementById('data').innerHTML = new Date( resposta.data.dataHora).toLocaleString();                 
+            }
+
+            async function postExample(){
+                const resposta = await axios.post('http://localhost:3000/', {
+                    nome: 'João',
+                    idade: 30,
+                })
+                console.log(resposta.data)
+            }
+
+
+
+            setInterval(getExample, 1000);
+        </script>
+    </body>
+</html>
