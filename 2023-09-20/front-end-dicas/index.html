@@ -1,120 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <form id="formCliente">
-    <input type="text" name="nome" id="nome" placeholder="Nome">
-    <input type="text" name="email" id="email" placeholder="Email">
-    <input  type="text" name="telefone" id="telefone" placeholder="Telefone">
-    <input type="text" name="cpf" id="cpf" placeholder="cpf">
-    <input type="text" name="cep" id="cep" placeholder="cep">
-    <input type="text" name="endereco" id="endereco" placeholder="endereco">
-    <input type="text" name="numero" id="numero" placeholder="numero">
-    <input type="text" name="complemento" id="complemento" placeholder="complemento">
-    <input type="text" name="bairro" id="bairro" placeholder="bairro">
-    <input type="text" name="cidade" id="cidade" placeholder="cidade">
-    <input type="text" name="estado" id="estado" placeholder="estado">
-    <input type="text" name="pais" id="pais" placeholder="pais">
-    <input type="text" name="senha" id="senha" placeholder="senha">
-    <input type="submit" value="salvar">
-
+      <input type="text" name="nome" id="nome" placeholder="Nome" />
+      <input type="text" name="email" id="email" placeholder="Email" />
+      <input type="text" name="telefone" id="telefone" placeholder="Telefone" />
+      <input type="text" name="cpf" id="cpf" placeholder="cpf" />
+      <input type="text" name="cep" id="cep" placeholder="cep" />
+      <input type="text" name="endereco" id="endereco" placeholder="endereco" />
+      <input type="text" name="numero" id="numero" placeholder="numero" />
+      <input
+        type="text"
+        name="complemento"
+        id="complemento"
+        placeholder="complemento"
+      />
+      <input type="text" name="bairro" id="bairro" placeholder="bairro" />
+      <input type="text" name="cidade" id="cidade" placeholder="cidade" />
+      <input type="text" name="estado" id="estado" placeholder="estado" />
+      <input type="text" name="pais" id="pais" placeholder="pais" />
+      <input type="text" name="senha" id="senha" placeholder="senha" />
+      <select name="estado" id="uf"></select>
+      <select id="cidades"></select>
+      <input type="submit" value="salvar" />
     </form>
 
-    
     <script>
-        var cliente = {
-            id: 1,
-            nome: "nome",
-            email: "email",
-            telefone: "telefone",
-            cpf: "cpf",
-            cep: "cep",
-            endereco: "endereco",
-            numero: "numero",
-            complemento: "complemento",
-            bairro: "bairro",
-            cidade: "cidade",
-            estado: "estado",
-            pais: "pais",
-            senha: "senha"            
-        }
+      var cliente = {
+        id: 1,
+        nome: 'nome',
+        email: 'email',
+        telefone: 'telefone',
+        cpf: 'cpf',
+        cep: 'cep',
+        endereco: 'endereco',
+        numero: 'numero',
+        complemento: 'complemento',
+        bairro: 'bairro',
+        cidade: 'cidade',
+        estado: 'estado',
+        pais: 'pais',
+        senha: 'senha',
+      };
 
+      async function carregarUfs() {
+        const select = document.getElementById('uf');
+        const resposta = await fetch(
+          'https://servicodados.ibge.gov.br/api/v1/localidades/estados'
+        );
+        const estados = await resposta.json();
+        estados.forEach(function (estado) {
+          const option = document.createElement('option');
+          option.value = estado.sigla;
+          option.innerHTML = estado.sigla;
+          select.appendChild(option);
+        });
+      }
+      carregarUfs();
 
-        function preencherFormulario(cliente){
-            document.getElementById("nome").value = cliente.nome;
-            document.getElementById("email").value = cliente.email;
-            document.getElementById("telefone").value = cliente.telefone;
-            document.getElementById("cpf").value = cliente.cpf;
-            document.getElementById("cep").value = cliente.cep;
-            document.getElementById("endereco").value = cliente.endereco;
-            document.getElementById("numero").value = cliente.numero;
-            document.getElementById("complemento").value = cliente.complemento;
-            document.getElementById("bairro").value = cliente.bairro;
-            document.getElementById("cidade").value = cliente.cidade;
-            document.getElementById("estado").value = cliente.estado;
-            document.getElementById("pais").value = cliente.pais;
-            document.getElementById("senha").value = cliente.senha;
-        }
+      async function buscarCidades() {
+        const uf = document.getElementById('uf').value;
+        const resposta = await fetch(
+          `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`
+        );
+        const cidades = await resposta.json();
+        const select = document.getElementById('cidades');
+        select.innerHTML = '';
+        cidades.forEach(function (cidade) {
+          const option = document.createElement('option');
+          option.value = cidade.nome;
+          option.innerHTML = cidade.nome;
+          select.appendChild(option);
+        });
+      }
+      document.getElementById('uf').addEventListener('change', buscarCidades);
 
-        function clienteDoFormulario(){
-            return {
-                nome: document.getElementById("nome").value,
-                email: document.getElementById("email").value,
-                telefone: document.getElementById("telefone").value,
-                cpf: document.getElementById("cpf").value,
-                cep: document.getElementById("cep").value,
-                endereco: document.getElementById("endereco").value,
-                numero: document.getElementById("numero").value,
-                complemento: document.getElementById("complemento").value,
-                bairro: document.getElementById("bairro").value,
-                cidade: document.getElementById("cidade").value,
-                estado: document.getElementById("estado").value,
-                pais: document.getElementById("pais").value,
-                senha: document.getElementById("senha").value                
-            }
-        }
+      function preencherFormulario(cliente) {
+        document.getElementById('nome').value = cliente.nome;
+        document.getElementById('email').value = cliente.email;
+        document.getElementById('telefone').value = cliente.telefone;
+        document.getElementById('cpf').value = cliente.cpf;
+        document.getElementById('cep').value = cliente.cep;
+        document.getElementById('endereco').value = cliente.endereco;
+        document.getElementById('numero').value = cliente.numero;
+        document.getElementById('complemento').value = cliente.complemento;
+        document.getElementById('bairro').value = cliente.bairro;
+        document.getElementById('cidade').value = cliente.cidade;
+        document.getElementById('estado').value = cliente.estado;
+        document.getElementById('pais').value = cliente.pais;
+        document.getElementById('senha').value = cliente.senha;
+      }
 
+      function clienteDoFormulario() {
+        return {
+          nome: document.getElementById('nome').value,
+          email: document.getElementById('email').value,
+          telefone: document.getElementById('telefone').value,
+          cpf: document.getElementById('cpf').value,
+          cep: document.getElementById('cep').value,
+          endereco: document.getElementById('endereco').value,
+          numero: document.getElementById('numero').value,
+          complemento: document.getElementById('complemento').value,
+          bairro: document.getElementById('bairro').value,
+          cidade: document.getElementById('cidade').value,
+          estado: document.getElementById('estado').value,
+          pais: document.getElementById('pais').value,
+          senha: document.getElementById('senha').value,
+        };
+      }
 
+      function buscarClienteDaApi() {
+        const cliente = {
+          id: 32,
+          nome: 'fulano',
+          email: 'fulano@senac.com.br',
+          telefone: '999999999',
+          cpf: '99999999999',
+          cep: '999999999',
+          endereco: 'rua',
+          numero: '999',
+          complemento: 'casa',
+          bairro: 'bairro',
+          cidade: 'CONCORDIA',
+          estado: 'SANTA CATARINA',
+          pais: 'BRASIL',
+          senha: '13245968',
+        };
 
-        function buscarClienteDaApi (){
-            const cliente = {
-                id: 32,
-                nome: 'fulano',
-                email: 'fulano@senac.com.br',
-                telefone: '999999999',
-                cpf: '99999999999',
-                cep: '999999999',
-                endereco: 'rua',
-                numero: '999',
-                complemento: 'casa',
-                bairro: 'bairro',
-                cidade: 'CONCORDIA',
-                estado: 'SANTA CATARINA',
-                pais: 'BRASIL',
-                senha: '13245968'
+        preencherFormulario(cliente);
+      }
 
-            }
+      function salvarClienteNaApi() {
+        const cliente = clienteDoFormulario();
+        // fetch('url',{method: 'POST' , body: JSON.stringify(cliente)})
+        alert('salvando cliente  na api' + JSON.stringify(cliente));
+      }
 
-            preencherFormulario(cliente);
-            
-        }
-
-        function salvarClienteNaApi(){
-            const cliente = clienteDoFormulario();
-           // fetch('url',{method: 'POST' , body: JSON.stringify(cliente)})
-           alert('salvando cliente  na api'+ JSON.stringify(cliente))
-        }
-
-
-        document.getElementById('formCliente').addEventListener('submit', function(event){
-            event.preventDefault();
-            salvarClienteNaApi();
+      document
+        .getElementById('formCliente')
+        .addEventListener('submit', function (event) {
+          event.preventDefault();
+          salvarClienteNaApi();
         });
     </script>
-
-</body>
+  </body>
 </html>
