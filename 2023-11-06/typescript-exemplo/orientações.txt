@@ -1,0 +1,23 @@
+npm init
+npm install typescript
+npx tsc --init
+
+criar arquivo app.ts com o códico
+console.log('hello world')
+
+npx tsc
+node app.js
+
+adicionar script
+
+npm run start
+
+criar arquivos model.ts e aluno.ts
+
+export class Model {
+
+}
+
+export class Aluno extends Model {
+
+}
