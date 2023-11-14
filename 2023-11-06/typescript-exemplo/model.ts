@@ -13,6 +13,10 @@ export class Model {
     }
 
     toString() {
-        return 'id: ' + this.id + '';
+        var string = "";
+        for (let key in this) {
+           string =string +" "+ key + ": " + this[key];
+        }
+        return string;
     }
 }
